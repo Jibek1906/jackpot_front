@@ -26,6 +26,10 @@ function LoginScreen() {
           // Если касса - направляем на страницу Django
           window.location.href = '/staff/cashier/';
           return;
+        } else if (result.finalUrl.includes('/admin/')) {
+          // Если администратор - направляем в стандартную админку Django
+          window.location.href = '/admin/';
+          return;
         } else if (result.finalUrl.includes('/staff/inspector')) {
           navigate('/inspector');
           return;

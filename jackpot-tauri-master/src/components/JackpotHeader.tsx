@@ -45,9 +45,8 @@ export default function JackpotHeader({ amount }: { amount: string }) {
       <div className='relative w-full flex items-center justify-center'>
         {/* ОСНОВНАЯ ЗОЛОТАЯ СУММА (скрывается, когда показываем прирост) */}
         <div
-          className={`flex items-center justify-center transition-opacity duration-500 absolute ${
-            showIncrement ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
-          }`}
+          className={`flex items-center justify-center transition-opacity duration-500 absolute ${showIncrement ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
+            }`}
         >
           {amount.split('').map((char, index) => {
             if (char === ' ') return <div key={index} className='w-8' />;
@@ -70,11 +69,10 @@ export default function JackpotHeader({ amount }: { amount: string }) {
 
         {/* ЗЕЛЕНАЯ СУММА ПРИРОСТА (Появляется поверх) */}
         <div
-          className={`flex items-center justify-center transition-all duration-500 absolute ${
-            showIncrement
+          className={`flex items-center justify-center transition-all duration-500 absolute ${showIncrement
               ? 'opacity-100 scale-100 translate-y-0'
               : 'opacity-0 scale-110 -translate-y-4 pointer-events-none'
-          }`}
+            }`}
         >
           <span
             className='font-oswald font-bold text-[9rem] leading-none tracking-wider'
