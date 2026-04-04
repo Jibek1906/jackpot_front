@@ -1,0 +1,13 @@
+version: "3.9"
+
+services:
+  staff_frontend:
+    build: /home/zhibek/jackpot-tauri-master
+    container_name: staff_frontend
+    restart: always
+    networks:
+      - jackpot_network
+
+networks:
+  jackpot_network:
+    external: true

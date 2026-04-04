@@ -29,7 +29,8 @@ export const authApi = {
       throw new Error('Неверный логин или пароль');
     }
 
-    return response.data;
+    const finalUrl = response.request?.responseURL || '';
+    return { data: response.data, finalUrl };
   },
 
   checkAuth: async () => {
