@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Oswald:wght@200..700&display=swap');
+@import 'tailwindcss';
+
+@theme {
+  --font-montserrat: 'Montserrat', sans-serif;
+  --font-oswald: 'Oswald', sans-serif;
+}
+
+@layer base {
+  html {
+    /* Формула: 100vw / Базовая_ширина_макета * 16 */
+    /* Предположим, дизайнер рисовал макет под стандартные 1920px */
+    font-size: calc(100vw / 1920 * 16);
+  }
+}
+
+@keyframes jackpot-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    filter: brightness(1) drop-shadow(0 15px 15px rgba(0, 0, 0, 0.5));
+  }
+  50% {
+    transform: scale(1.08); /* Увеличиваем на 8% */
+    filter: brightness(1.3) drop-shadow(0 0 25px rgba(255, 184, 0, 0.6)); /* Подсвечиваем */
+  }
+}
+
+.animate-jackpot {
+  animation: jackpot-pulse 2s ease-in-out infinite;
+}

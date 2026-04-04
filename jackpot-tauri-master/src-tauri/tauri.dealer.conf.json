@@ -1,0 +1,30 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Jackpot Dealer",
+  "version": "1.0.0",
+  "identifier": "com.seite.jackpot-dealer",
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://localhost:1420/dealer.html",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "Пульт Инспектора",
+        "width": 1280,
+        "height": 800,
+        "fullscreen": false,
+        "url": "dealer.html#/dealer"
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all"
+  }
+}
