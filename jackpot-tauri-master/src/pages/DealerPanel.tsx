@@ -1,4 +1,4 @@
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useInspectorStore } from '../store/inspectorStore';
 import DealerChipCard from '../components/DealerChipCard';
@@ -7,7 +7,6 @@ import useStaffSocket from '../hooks/useStaffSocket';
 export default function DealerPanel() {
   const { tableId } = useParams();
   const navigate = useNavigate();
-  const location = useLocation();
 
   const {
     tables,
@@ -47,10 +46,6 @@ export default function DealerPanel() {
     await triggerJackpot(currentTable.id, chip.level_num, chip.color_name);
   };
 
-  const basePath = location.pathname.startsWith('/inspector')
-    ? '/inspector'
-    : '/dealer';
-
   if (!currentTable) {
     return (
       <div className='h-[100vh] w-full bg-[#030305] flex items-center justify-center text-white text-[24px]'>
@@ -67,7 +62,7 @@ export default function DealerPanel() {
         {/* Шапка */}
         <div className='flex items-center justify-between mb-[16px] shrink-0 px-[8px]'>
           <button
-            onClick={() => navigate(basePath)}
+            onClick={() => navigate('/dealer')}
             className='text-gray-400 text-[14px] hover:text-white transition-colors'
           >
             ← К столам
