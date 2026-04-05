@@ -17,26 +17,10 @@ function LoginScreen() {
 
     try {
       // Вызываем нашу функцию логина из API клиента
-      const result = await authApi.login(username, password);
+      await authApi.login(username, password);
 
       toast.success('Авторизация успешна!');
-
-      if (result.finalUrl) {
-        if (result.finalUrl.includes('/staff/cashier')) {
-          // Если касса - направляем на страницу Django
-          window.location.href = '/staff/cashier/';
-          return;
-        } else if (result.finalUrl.includes('/admin/')) {
-          // Если администратор - направляем в стандартную админку Django
-          window.location.href = '/admin/';
-          return;
-        } else if (result.finalUrl.includes('/staff/inspector')) {
-          navigate('/inspector');
-          return;
-        }
-      }
-      
-      // По умолчанию после успешного входа отправляем пользователя к пульту дилера
+      // После успешного входа отправляем пользователя к выбору стола
       navigate('/dealer');
     } catch (error: any) {
       console.error('Ошибка входа:', error);

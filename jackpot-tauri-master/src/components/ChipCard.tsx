@@ -30,20 +30,23 @@ export default function ChipCard({ item, jackpotAmount }: ChipCardProps) {
         {item.color_name}
       </span>
 
-      <div className='flex items-center h-full ml-4'>
-        <div className='w-[0.0625rem] h-[70%] bg-white/20 mr-6'></div>
-        <div className='flex flex-col items-center justify-center font-montserrat'>
-          <span className='text-xs text-[#FFB800] mb-1 font-bold tracking-widest'>
-            {jackpotAmount}
-          </span>
-          <span className='text-4xl font-bold text-[#FFB800] drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]'>
-            {displayPercent}
-          </span>
-          <span className='text-[0.60rem] text-gray-300 mt-1 uppercase tracking-wide whitespace-nowrap'>
-            от джекпота
-          </span>
+      {/* Условие: показываем блок только если is_cashable === true */}
+      {item.is_cashable && (
+        <div className='flex items-center h-full ml-4'>
+          <div className='w-[0.0625rem] h-[70%] bg-white/20 mr-6'></div>
+          <div className='flex flex-col items-center justify-center font-montserrat'>
+            <span className='text-xs text-[#FFB800] mb-1 font-bold tracking-widest'>
+              {jackpotAmount}
+            </span>
+            <span className='text-4xl font-bold text-[#FFB800] drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]'>
+              {displayPercent}
+            </span>
+            <span className='text-[0.60rem] text-gray-300 mt-1 uppercase tracking-wide whitespace-nowrap'>
+              от джекпота
+            </span>
+          </div>
         </div>
-      </div>
+      )}
     </GlowCard>
   );
 }

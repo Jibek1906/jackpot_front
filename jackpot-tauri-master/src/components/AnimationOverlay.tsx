@@ -1,24 +1,28 @@
 import { useEffect, useMemo } from 'react';
 import confetti from 'canvas-confetti';
 import { useTvStore } from '../store/tvStore';
-import TText from './TText'; // 1. Добавили импорт компонента для перевода
+import TText from './TText';
 
 interface AnimationOverlayProps {
-  data: any;
-  // 2. Убрали tableId отсюда, он нам больше не нужен
+  data: any; // Убрали знак вопроса, теперь пропс снова обязательный
 }
 
 export default function AnimationOverlay({ data }: AnimationOverlayProps) {
-  // 3. Вытаскиваем tableName из нашего стора вместе с остальными данными
   const { chips, currentPool, tableName } = useTvStore();
 
+  // Ищем реальную фишку по данным из сокета
   const activeChip = chips.find((chip) => chip.level === data.level);
+  const isCashable = activeChip?.is_cashable ?? true;
 
   const rawAmount = data.amount
     ? Number(data.amount)
     : Number(currentPool) * Number(activeChip?.payout_percent || 0);
 
   const formattedAmount = `$${rawAmount.toLocaleString('ru-RU', {
+    maximumFractionDigits: 0,
+  })}`;
+
+  const formattedJackpot = `$${Number(currentPool).toLocaleString('ru-RU', {
     maximumFractionDigits: 0,
   })}`;
 
@@ -63,7 +67,8 @@ export default function AnimationOverlay({ data }: AnimationOverlayProps) {
 
   return (
     <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm animate-in fade-in duration-500 overflow-hidden'>
-      <div className='absolute bottom-[-65.5rem] left-1/2 -translate-x-1/2 w-[120rem] h-[120rem] animate-[spin_20s_linear_infinite] pointer-events-none z-0'>
+      {/* КРУГ-ГОРИЗОНТ */}
+      <div className='absolute bottom-[-100.5rem] left-1/2 -translate-x-1/2 w-[162rem] h-[162rem] animate-[spin_20s_linear_infinite] pointer-events-none z-0'>
         <svg viewBox='0 0 2000 2000' className='w-full h-full'>
           <path
             id='textPath'
@@ -87,32 +92,89 @@ export default function AnimationOverlay({ data }: AnimationOverlayProps) {
         </svg>
       </div>
 
-      <div className='absolute bottom-[18.75rem] z-10 flex flex-col items-center animate-in zoom-in duration-700 delay-300 fill-mode-both'>
-        <div className='w-[12rem] h-[12rem] flex items-center justify-center -mb-[2.5rem] z-20'>
-          {imageUrl ? (
-            <img
-              src={imageUrl}
-              alt={`Multiplier X${data.level}`}
-              className='w-full h-full object-contain drop-shadow-[0_0_40px_rgba(255,184,0,0.6)]'
-            />
-          ) : (
-            <div className='w-[10rem] h-[10rem] rounded-full bg-purple-700 border-4 border-purple-400 flex items-center justify-center shadow-[0_0_50px_rgba(147,51,234,0.6)]'>
-              <span className='text-white text-4xl font-bold'>
-                x{data.level}
-              </span>
-            </div>
-          )}
-        </div>
-
-        <h1 className='font-oswald font-bold text-[9rem] leading-none bg-linear-to-b from-[#FFF0A8] via-[#FFB800] to-[#CC9300] text-transparent bg-clip-text [-webkit-text-stroke:4px_#593A00] drop-shadow-[0_20px_20px_rgba(0,0,0,0.8)] z-30'>
-          {formattedAmount}
-        </h1>
-
-        {/* 4. Заменили хардкод текста на компонент перевода и вывели реальное имя стола */}
-        <span className='text-[#FFB800] font-montserrat font-bold text-4xl tracking-widest mt-6 z-30 flex items-center gap-3'>
+      <div className='absolute bottom-[14rem] z-10 flex flex-col items-center animate-in zoom-in duration-700 delay-300 fill-mode-both'>
+        {/* Номер стола (всегда сверху) */}
+        <span className='text-[#FFB800] font-montserrat font-bold text-4xl tracking-widest mb-8 z-30 flex items-center gap-3'>
           <TText tKey='tv.table' fallback='СТОЛ' />{' '}
-          {tableName.replace(/стол/i, '').trim()}
+          {tableName.replace(/стол|table/i, '').trim()}
         </span>
+
+        {/* Логика переключения */}
+        {isCashable ? (
+          // ВАРИАНТ 1: Фишка с деньгами (с процентами)
+          <div className='flex items-center gap-8 z-30'>
+            {/* Имя и картинка фишки */}
+            <div className='flex flex-col items-center gap-3'>
+              <span className='text-white text-xl font-montserrat font-medium tracking-widest uppercase'>
+                {activeChip?.color_name || ''}
+              </span>
+              <div className='w-40 h-40 flex items-center justify-center'>
+                {imageUrl ? (
+                  <img
+                    src={imageUrl}
+                    alt=''
+                    className='w-full h-full object-contain drop-shadow-[0_0_40px_rgba(255,184,0,0.6)]'
+                  />
+                ) : (
+                  <div className='w-[10rem] h-[10rem] rounded-full bg-purple-700 border-4 border-purple-400 flex items-center justify-center shadow-[0_0_50px_rgba(147,51,234,0.6)]'>
+                    <span className='text-white text-4xl font-bold'>
+                      x{data.level}
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Знак равно */}
+            <span className='text-[#FFB800] font-bold text-7xl mt-8 font-montserrat'>
+              =
+            </span>
+
+            {/* Выигрыш */}
+            <div className='flex flex-col items-center gap-3'>
+              <span className='text-white text-xl font-montserrat font-medium tracking-widest uppercase'>
+                {activeChip?.payout_percent
+                  ? `${Number(activeChip.payout_percent) * 100}% ОТ ДЖЕКПОТА`
+                  : ''}
+              </span>
+              <h1 className='font-oswald font-bold text-[8.5rem] leading-none bg-linear-to-b from-[#FFF0A8] via-[#FFB800] to-[#CC9300] text-transparent bg-clip-text [-webkit-text-stroke:3px_#593A00] drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)]'>
+                {formattedAmount}
+              </h1>
+            </div>
+          </div>
+        ) : (
+          // ВАРИАНТ 2: Фишка-пустышка / физический приз
+          <div className='flex flex-col items-center gap-6 z-30'>
+            <div className='w-56 h-56 flex items-center justify-center'>
+              {imageUrl ? (
+                <img
+                  src={imageUrl}
+                  alt=''
+                  className='w-full h-full object-contain drop-shadow-[0_0_40px_rgba(255,184,0,0.6)]'
+                />
+              ) : (
+                <div className='w-[14rem] h-[14rem] rounded-full bg-purple-700 border-4 border-purple-400 flex items-center justify-center shadow-[0_0_50px_rgba(147,51,234,0.6)]'>
+                  <span className='text-white text-6xl font-bold'>
+                    x{data.level}
+                  </span>
+                </div>
+              )}
+            </div>
+            <span className='text-white font-montserrat font-bold text-5xl tracking-widest uppercase'>
+              {activeChip?.color_name || ''}
+            </span>
+          </div>
+        )}
+
+        {/* Общий джекпот (всегда снизу) */}
+        <div className='mt-12 flex items-center gap-6 z-30'>
+          <span className='text-[#FFB800] font-oswald text-[3.5rem] tracking-widest'>
+            <TText tKey='tv.jackpot' fallback='JACKPOT' />
+          </span>
+          <span className='font-oswald font-bold text-[5.5rem] leading-none bg-linear-to-b from-[#FFF0A8] via-[#FFB800] to-[#CC9300] text-transparent bg-clip-text [-webkit-text-stroke:2px_#593A00] drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)]'>
+            {formattedJackpot}
+          </span>
+        </div>
       </div>
     </div>
   );

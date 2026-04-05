@@ -145,6 +145,7 @@ function TvScreen() {
       <BottomBar />
 
       {activeAnimation && <AnimationOverlay data={activeAnimation} />}
+      {/* <AnimationOverlay data={null} /> */}
     </div>
   );
 }

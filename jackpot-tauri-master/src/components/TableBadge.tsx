@@ -22,7 +22,7 @@ export default function TableBadge({ tableName }: { tableName: string }) {
       />
       <span className='font-montserrat text-4xl py-1.5 px-4 rounded-md font-bold border-[0.1rem] border-[#FFB800] leading-none bg-linear-to-b from-[#FFF8D6] via-[#FFB800] via-40% to-[#CC9300] text-transparent bg-clip-text flex items-center gap-2'>
         <TText tKey='tv.table' fallback='СТОЛ' />{' '}
-        {tableName.replace(/стол/i, '').trim()}
+        {tableName.replace(/стол|table/i, '').trim()}
       </span>
     </div>
   );

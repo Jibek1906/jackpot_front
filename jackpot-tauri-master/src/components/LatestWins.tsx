@@ -18,7 +18,7 @@ export default function LatestWins() {
           >
             <div className='text-[2.5rem] leading-none font-bold mb-3 font-montserrat flex items-center'>
               <span className='text-white mr-3'>
-                <TText tKey='tv.win_label' fallback='WIN' />
+                <span className='text-white mr-3'>WIN</span>
               </span>
               <span className='text-[#FFB800] drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]'>
                 $
