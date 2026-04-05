@@ -22,9 +22,8 @@ export default function TText({ tKey, fallback }: TTextProps) {
 
   return (
     <span
-      className={`transition-opacity duration-300 ease-in-out ${
-        fade ? 'opacity-0' : 'opacity-100'
-      }`}
+      className={`transition-opacity duration-300 ease-in-out ${fade ? 'opacity-0' : 'opacity-100'
+        }`}
     >
       {text}
     </span>

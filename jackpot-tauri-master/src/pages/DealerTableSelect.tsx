@@ -1,8 +1,10 @@
 import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import TableSelectButton from '../components/TableSelectButton';
 import { useInspectorStore } from '../store/inspectorStore';
 
 export default function DealerTableSelect() {
+  const location = useLocation();
   const { tables, isLoading, fetchInitialData, setSelectedTableId } =
     useInspectorStore();
 
@@ -19,6 +21,9 @@ export default function DealerTableSelect() {
   }
 
   const activeTables = tables.filter((table) => table.is_active);
+  const basePath = location.pathname.startsWith('/inspector')
+    ? '/inspector'
+    : '/dealer';
 
   return (
     // Используем h-[100vh] и w-full для строгого заполнения окна
@@ -35,7 +40,7 @@ export default function DealerTableSelect() {
               key={table.id}
               tableName={table.table_name}
               onClick={() => setSelectedTableId(table.id)}
-              to={`/dealer/${table.id}`}
+              to={`${basePath}/${table.id}`}
             />
           ))
         ) : (
